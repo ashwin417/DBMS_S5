@@ -292,3 +292,16 @@ mysql> desc late_fee_rule;
 | amount    | int(11) | NO   | PRI | NULL    |       |
 +-----------+---------+------+-----+---------+-------+
 3 rows in set (0.00 sec)
+
+// Question 5 to show index
+
+mysql> show index from Book_issue;
++------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Table      | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Book_issue |          0 | PRIMARY  |            1 | issue_id    | A         |           0 |     NULL | NULL   |      | BTREE      |         |               |
+| Book_issue |          1 | c1       |            1 | book_id     | A         |           0 |     NULL | NULL   | YES  | BTREE      |         |               |
+| Book_issue |          1 | membook  |            1 | member_id   | A         |           0 |     NULL | NULL   | YES  | BTREE      |         |               |
+| Book_issue |          1 | membook  |            2 | book_id     | A         |           0 |     NULL | NULL   | YES  | BTREE      |         |               |
++------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+4 rows in set (0.00 sec)
