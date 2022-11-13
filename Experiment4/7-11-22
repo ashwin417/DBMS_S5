@@ -1,0 +1,607 @@
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+s5cii@cc-Vostro-3470:~$ sudo mysql -u s5c43 -p
+[sudo] password for s5cii: 
+Enter password: 
+ERROR 1045 (28000): Access denied for user 's5c43'@'localhost' (using password: YES)
+s5cii@cc-Vostro-3470:~$ sudo mysql -u s5c43 -p
+Enter password: 
+ERROR 1045 (28000): Access denied for user 's5c43'@'localhost' (using password: YES)
+s5cii@cc-Vostro-3470:~$ sudo mysql -u s5c43 -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 4
+Server version: 5.7.40-0ubuntu0.18.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases
+    -> ;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| 44library          |
+| Bank               |
+| Construction       |
+| Database25         |
+| LIBRARY            |
+| bank               |
+| bank1              |
+| bank121            |
+| bank21             |
+| book               |
+| class              |
+| clg                |
+| college            |
+| company            |
+| cs                 |
+| dbmss              |
+| exam               |
+| firm               |
+| lib                |
+| lib1               |
+| lib2               |
+| lib3               |
+| libb               |
+| library            |
+| library1           |
+| library_65         |
+| libraryy           |
+| movies             |
+| movies1            |
+| my_database        |
+| mysql              |
+| performance_schema |
+| products           |
+| school             |
+| student            |
+| students           |
+| studentss          |
+| sys                |
++--------------------+
+39 rows in set (0.12 sec)
+
+mysql> use library;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables
+    -> ;
++-------------------+
+| Tables_in_library |
++-------------------+
+| Book_author       |
+| Book_issue        |
+| Book_return       |
+| author            |
+| book              |
+| language          |
+| late_fee_rule     |
+| member            |
+| publisher         |
++-------------------+
+9 rows in set (0.00 sec)
+
+mysql> 
+Display all 871 possibilities? (y or n) 
+mysql> 
+[1]+  Stopped                 sudo mysql -u s5c43 -p
+s5cii@cc-Vostro-3470:~$ sudo mysql -u s5c43 -p
+[sudo] password for s5cii: 
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 7
+Server version: 5.7.40-0ubuntu0.18.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> REVOKE SELECT on member FROM 's5c43'@'localhost';
+ERROR 1046 (3D000): No database selected
+mysql> use library;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> REVOKE SELECT on member FROM 's5c43'@'localhost';
+ERROR 1147 (42000): There is no such grant defined for user 's5c43' on host 'localhost' on table 'member'
+mysql> grant SELECT on member FROM 's5c43'@'localhost';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM 's5c43'@'localhost'' at line 1
+mysql> grant SELECT on member FROM s5c43@localhost;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM s5c43@localhost' at line 1
+mysql> grant SELECT on member FROM s5c43;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM s5c43' at line 1
+mysql> grant SELECT on member to 's5c43'@'localhost';
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select * from member;
+Empty set (0.00 sec)
+
+mysql> show tables;
++-------------------+
+| Tables_in_library |
++-------------------+
+| Book_author       |
+| Book_issue        |
+| Book_return       |
+| author            |
+| book              |
+| language          |
+| late_fee_rule     |
+| member            |
+| publisher         |
++-------------------+
+9 rows in set (0.00 sec)
+
+mysql> select * from language;
++---------+-----------+
+| lang_id | name      |
++---------+-----------+
+|    2002 | Kiliki    |
+|    2004 | Malayalam |
+|    7603 | ENGLISH   |
+|    8999 | telugu    |
++---------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> grant SELECT on language to 's5c43'@'localhost';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> REVOKE SELECT on language FROM 's5c43'@'localhost';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from language;
++---------+-----------+
+| lang_id | name      |
++---------+-----------+
+|    2002 | Kiliki    |
+|    2004 | Malayalam |
+|    7603 | ENGLISH   |
+|    8999 | telugu    |
++---------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> grant all privileges on book to s5cii;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> revoke all privileges on book from s5cii;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from book;
+Empty set (0.00 sec)
+
+mysql> INSERT INTO book VALUES
+    -> (142,"CN","English",1200,541,2020-06-07,3,"Online");
+ERROR 1366 (HY000): Incorrect integer value: 'English' for column 'language_id' at row 1
+mysql> INSERT INTO book VALUES (142,"CN",001,1200,541,2020-06-07,3,"Online");
+ERROR 1292 (22007): Incorrect date value: '2007' for column 'published_data' at row 1
+mysql> INSERT INTO book VALUES (142,"CN",001,1200,541,'2020-06-07',3,"Online");
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`library`.`book`, CONSTRAINT `c11` FOREIGN KEY (`language_id`) REFERENCES `language` (`lang_id`))
+mysql> INSERT INTO author VALUES (1234,"Karthik","kv@gmail.com",9966554412,"Working");
+ERROR 1264 (22003): Out of range value for column 'phno' at row 1
+mysql> INSERT INTO author VALUES (1234,"Karthik","kv@gmail.com",9966,"Working");
+Query OK, 1 row affected (0.03 sec)
+
+mysql> INSERT INTO author VALUES (33,"Adarsh","Adaj@gmail.com",9969,"Working"),(89,"Nibin","nps@gmail.com",6686,"Working");
+Query OK, 2 rows affected (0.04 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO author VALUES (999,"Akash","akl@gmail.com",9965,"Stopped");
+Query OK, 1 row affected (0.03 sec)
+
+mysql> INSERT INTO Book_author VALUES (1,999);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`library`.`Book_author`, CONSTRAINT `c14` FOREIGN KEY (`book_id`) REFERENCES `book` (`book_id`))
+mysql> INSERT INTO publisher VALUES (3011,"ANK","Chengannur");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> INSERT INTO publisher VALUES (3012,"AAK","Tiruvalla");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> INSERT INTO publisher VALUES (3013,"AAA","Kochi");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> INSERT INTO book VALUES (142,"CN",7603,1200,541,'2020-06-07',3,"Online");
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`library`.`book`, CONSTRAINT `c13` FOREIGN KEY (`published_id`) REFERENCES `publisher` (`publisher_id`))
+mysql> show table Book_author;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Book_author' at line 1
+mysql> show Book_author;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Book_author' at line 1
+mysql> select * from Book_author;
+Empty set (0.00 sec)
+
+mysql> desc Book_author;
++-----------+---------+------+-----+---------+-------+
+| Field     | Type    | Null | Key | Default | Extra |
++-----------+---------+------+-----+---------+-------+
+| book_id   | int(11) | NO   | PRI | NULL    |       |
+| author_id | int(11) | NO   | PRI | NULL    |       |
++-----------+---------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> desc book;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| book_id        | int(11)     | NO   | PRI | NULL    |       |
+| title          | varchar(20) | YES  |     | NULL    |       |
+| language_id    | int(11)     | YES  | MUL | NULL    |       |
+| mrp            | bigint(20)  | YES  |     | NULL    |       |
+| published_id   | int(11)     | YES  | MUL | NULL    |       |
+| published_data | date        | YES  |     | NULL    |       |
+| volume         | int(11)     | YES  |     | NULL    |       |
+| status         | varchar(20) | YES  |     | NULL    |       |
++----------------+-------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+mysql> SET foreign_key_checks = 0;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> INSERT INTO book VALUES (142,"CN",001,1200,541,'2020-06-07',3,"Online");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from book;
++---------+-------+-------------+------+--------------+----------------+--------+--------+
+| book_id | title | language_id | mrp  | published_id | published_data | volume | status |
++---------+-------+-------------+------+--------------+----------------+--------+--------+
+|     142 | CN    |           1 | 1200 |          541 | 2020-06-07     |      3 | Online |
++---------+-------+-------------+------+--------------+----------------+--------+--------+
+1 row in set (0.00 sec)
+
+mysql> select * from Author;
+ERROR 1146 (42S02): Table 'library.Author' doesn't exist
+mysql> select * from author;
++-----------+---------+----------------+------+---------+
+| author_id | name    | email          | phno | status  |
++-----------+---------+----------------+------+---------+
+|        33 | Adarsh  | Adaj@gmail.com | 9969 | Working |
+|        89 | Nibin   | nps@gmail.com  | 6686 | Working |
+|       999 | Akash   | akl@gmail.com  | 9965 | Stopped |
+|      1234 | Karthik | kv@gmail.com   | 9966 | Working |
++-----------+---------+----------------+------+---------+
+4 rows in set (0.00 sec)
+
+mysql> select * from language;
++---------+-----------+
+| lang_id | name      |
++---------+-----------+
+|    2002 | Kiliki    |
+|    2004 | Malayalam |
+|    7603 | ENGLISH   |
+|    8999 | telugu    |
++---------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> INSERT INTO book VALUES (143,"DBMS",002,4000,542,'2019-06-07',12,"Online");
+Query OK, 1 row affected (0.03 sec)
+
+mysql> INSERT INTO book VALUES (144,"Ravi's life",2004,100,544,'2022-11-07',1,"Online");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> INSERT INTO book VALUES (144,"Encyclopedia",2002,1000,541,'2022-10-07',1,"Online");
+ERROR 1062 (23000): Duplicate entry '144' for key 'PRIMARY'
+mysql> INSERT INTO book VALUES (150,"Encyclopedia",2002,1000,541,'2022-10-07',1,"Online");
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from book;
++---------+--------------+-------------+------+--------------+----------------+--------+--------+
+| book_id | title        | language_id | mrp  | published_id | published_data | volume | status |
++---------+--------------+-------------+------+--------------+----------------+--------+--------+
+|     142 | CN           |           1 | 1200 |          541 | 2020-06-07     |      3 | Online |
+|     143 | DBMS         |           2 | 4000 |          542 | 2019-06-07     |     12 | Online |
+|     144 | Ravi's life  |        2004 |  100 |          544 | 2022-11-07     |      1 | Online |
+|     150 | Encyclopedia |        2002 | 1000 |          541 | 2022-10-07     |      1 | Online |
++---------+--------------+-------------+------+--------------+----------------+--------+--------+
+4 rows in set (0.00 sec)
+
+mysql> INSERT INTO book VALUES (155,"System software",7603,1900,542,'2022-10-10',9,"Online");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> INSERT INTO book VALUES (160,"Fun",8999,200,544,'2010-10-10',2,"Stopped");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> update table book set language_id = 7603 where book_id=142;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table book set language_id = 7603 where book_id=142' at line 1
+mysql> update book set language_id = 7603 where book_id=142;
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update book set language_id = 7603 where book_id=143;
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from book;
++---------+-----------------+-------------+------+--------------+----------------+--------+---------+
+| book_id | title           | language_id | mrp  | published_id | published_data | volume | status  |
++---------+-----------------+-------------+------+--------------+----------------+--------+---------+
+|     142 | CN              |        7603 | 1200 |          541 | 2020-06-07     |      3 | Online  |
+|     143 | DBMS            |        7603 | 4000 |          542 | 2019-06-07     |     12 | Online  |
+|     144 | Ravi's life     |        2004 |  100 |          544 | 2022-11-07     |      1 | Online  |
+|     150 | Encyclopedia    |        2002 | 1000 |          541 | 2022-10-07     |      1 | Online  |
+|     155 | System software |        7603 | 1900 |          542 | 2022-10-10     |      9 | Online  |
+|     160 | Fun             |        8999 |  200 |          544 | 2010-10-10     |      2 | Stopped |
++---------+-----------------+-------------+------+--------------+----------------+--------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select * from publisher;
++--------------+------+------------+
+| publisher_id | name | address    |
++--------------+------+------------+
+|         3011 | ANK  | Chengannur |
+|         3012 | AAK  | Tiruvalla  |
+|         3013 | AAA  | Kochi      |
++--------------+------+------------+
+3 rows in set (0.00 sec)
+
+mysql> update publisher set publisher_id = 7603 where publisher_id=3011;
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update publisher set publisher_id = 541 where publisher_id=7603;
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update publisher set publisher_id = 542 where publisher_id=3012;
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update publisher set publisher_id = 544 where publisher_id=3013;
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> INSERT INTO Book_author VALUES (144,999),(142,89),(143,33),(150,1234),(160,999),(155,33);
+Query OK, 6 rows affected (0.04 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> select * Book_author;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Book_author' at line 1
+mysql> select * from Book_author;
++---------+-----------+
+| book_id | author_id |
++---------+-----------+
+|     143 |        33 |
+|     155 |        33 |
+|     142 |        89 |
+|     144 |       999 |
+|     160 |       999 |
+|     150 |      1234 |
++---------+-----------+
+6 rows in set (0.00 sec)
+
+mysql> desc member
+    -> ;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| member_id    | int(11)     | NO   | PRI | NULL    |       |
+| name         | varchar(20) | YES  |     | NULL    |       |
+| email        | varchar(20) | YES  |     | NULL    |       |
+| rollno       | int(11)     | YES  |     | NULL    |       |
+| status       | varchar(20) | YES  |     | NULL    |       |
+| branch_code  | int(11)     | YES  |     | NULL    |       |
+| date_of_join | date        | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> insert into member values
+    -> (10001,"Shweta","ss@gmail.com",12124,"No Due","1721",'2018-10-31'),
+    -> (10002,"Ashwin","ash@proton.me",12125,"Due","1721",'2018-09-31'),
+    -> (10003,"Jeffi","jf@gmail.com",12126,"No Due","9998",'2019-05-05'),
+    -> (10005,"Ravi","Ravi@gmail.com",12128,"Due","9991",'2020-04-01');
+ERROR 1292 (22007): Incorrect date value: '2018-09-31' for column 'date_of_join' at row 2
+mysql> insert into member values (10001,"Shweta","ss@gmail.com",12124,"No Due","1721",'2018-10-31'), (10002,"Ashwin","ash@proton.me",12125,"Due","1721",'2018-09-30'), (10003,"Jeffi","jf@gmail.com",12126,"No Due","9998",'2019-05-05'), (10005,"Ravi","Ravi@gmail.com",12128,"Due","9991",'2020-04-01');
+Query OK, 4 rows affected (0.04 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from member;
++-----------+--------+----------------+--------+--------+-------------+--------------+
+| member_id | name   | email          | rollno | status | branch_code | date_of_join |
++-----------+--------+----------------+--------+--------+-------------+--------------+
+|     10001 | Shweta | ss@gmail.com   |  12124 | No Due |        1721 | 2018-10-31   |
+|     10002 | Ashwin | ash@proton.me  |  12125 | Due    |        1721 | 2018-09-30   |
+|     10003 | Jeffi  | jf@gmail.com   |  12126 | No Due |        9998 | 2019-05-05   |
+|     10005 | Ravi   | Ravi@gmail.com |  12128 | Due    |        9991 | 2020-04-01   |
++-----------+--------+----------------+--------+--------+-------------+--------------+
+4 rows in set (0.00 sec)
+
+mysql> show tables;
++-------------------+
+| Tables_in_library |
++-------------------+
+| Book_author       |
+| Book_issue        |
+| Book_return       |
+| author            |
+| book              |
+| language          |
+| late_fee_rule     |
+| member            |
+| publisher         |
++-------------------+
+9 rows in set (0.00 sec)
+
+mysql> insert into late_fee_rule^[[B^[[A^[[A^[[A^[[B^[[B^[[B^[[A^[[A^[[A^[[A^C^Z
+[2]+  Stopped                 sudo mysql -u s5c43 -p
+s5cii@cc-Vostro-3470:~$ sudo mysql -u s5c43 -p
+[sudo] password for s5cii: 
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 5.7.40-0ubuntu0.18.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> desc late_fee_rule;
+ERROR 1046 (3D000): No database selected
+mysql> use library
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> desc late_fee_rule;
++-----------+---------+------+-----+---------+-------+
+| Field     | Type    | Null | Key | Default | Extra |
++-----------+---------+------+-----+---------+-------+
+| from_days | int(11) | NO   | PRI | NULL    |       |
+| to_days   | int(11) | NO   | PRI | NULL    |       |
+| amount    | int(11) | NO   | PRI | NULL    |       |
++-----------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql>  insert into late_fee_rule values 
+    -> (0,7,10),
+    -> (7,30,100),
+    -> (30,NULL,10);
+ERROR 1048 (23000): Column 'to_days' cannot be null
+mysql> insert into late_fee_rule values  (0,7,10), (7,30,100), (30,,10);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '10)' at line 1
+mysql> insert into late_fee_rule values  (0,7,10), (7,30,100), (30,0,10);
+Query OK, 3 rows affected (0.04 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> desc Book_issue;
++-------------------------+---------+------+-----+---------+-------+
+| Field                   | Type    | Null | Key | Default | Extra |
++-------------------------+---------+------+-----+---------+-------+
+| issue_id                | int(11) | NO   | PRI | NULL    |       |
+| book_id                 | int(11) | YES  | MUL | NULL    |       |
+| member_id               | int(11) | YES  | MUL | NULL    |       |
+| date_of_issue           | date    | YES  |     | NULL    |       |
+| expected_date_of_return | date    | YES  |     | NULL    |       |
++-------------------------+---------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> insert into Book_issue values
+    -> (91,142,10002,'2022-06-06','2022-06-20'),
+    -> (92,143,10001,'2022-07-05','2022-07-19'),
+    -> (93,144,10005,'2022-10-31','2022-11-13'),
+    -> (94,155,10003,'2022-09-06','2022-09-20');
+Query OK, 4 rows affected (0.05 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> desc Book_return;
++-----------------------+---------+------+-----+---------+-------+
+| Field                 | Type    | Null | Key | Default | Extra |
++-----------------------+---------+------+-----+---------+-------+
+| issue_id              | int(11) | YES  | MUL | NULL    |       |
+| actual_date_of_return | date    | YES  |     | NULL    |       |
+| late_days             | int(11) | YES  |     | NULL    |       |
+| latefee               | int(11) | YES  |     | NULL    |       |
++-----------------------+---------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> insert into Book_return values
+    -> (91,'2022-06-27',7,10),
+    -> (92,'2022-07-19',0,0),
+    -> (93,'2022-11-23',10,100),
+    -> (94,'2022-09-22',2,10);
+Query OK, 4 rows affected (0.03 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from author;
++-----------+---------+----------------+------+---------+
+| author_id | name    | email          | phno | status  |
++-----------+---------+----------------+------+---------+
+|        33 | Adarsh  | Adaj@gmail.com | 9969 | Working |
+|        89 | Nibin   | nps@gmail.com  | 6686 | Working |
+|       999 | Akash   | akl@gmail.com  | 9965 | Stopped |
+|      1234 | Karthik | kv@gmail.com   | 9966 | Working |
++-----------+---------+----------------+------+---------+
+4 rows in set (0.00 sec)
+
+mysql> select count(*) from author a, Book_author ba where a.author_id=ba.author.id;
+ERROR 1054 (42S22): Unknown column 'ba.author.id' in 'where clause'
+mysql> desc Book_author;
++-----------+---------+------+-----+---------+-------+
+| Field     | Type    | Null | Key | Default | Extra |
++-----------+---------+------+-----+---------+-------+
+| book_id   | int(11) | NO   | PRI | NULL    |       |
+| author_id | int(11) | NO   | PRI | NULL    |       |
++-----------+---------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> desc author;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| author_id | int(11)     | NO   | PRI | NULL    |       |
+| name      | varchar(20) | YES  |     | NULL    |       |
+| email     | varchar(20) | YES  |     | NULL    |       |
+| phno      | int(11)     | YES  |     | NULL    |       |
+| status    | varchar(20) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> select count(book_id) from author a, Book_author ba where a.author_id=ba.author.id;
+ERROR 1054 (42S22): Unknown column 'ba.author.id' in 'where clause'
+mysql> select count(book_id) from author a, Book_author ba where a.author_id = ba.author.id;
+ERROR 1054 (42S22): Unknown column 'ba.author.id' in 'where clause'
+mysql> select count(*) from author;
++----------+
+| count(*) |
++----------+
+|        4 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select count(ba.book_id) from author a, Book_author ba where a.name = "Akash";
++-------------------+
+| count(ba.book_id) |
++-------------------+
+|                 6 |
++-------------------+
+1 row in set (0.00 sec)
+
+mysql> select count(*) from author a, Book_author ba where a.name = "Akash";
++----------+
+| count(*) |
++----------+
+|        6 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select count(*) from Book_author where author_id=33;
++----------+
+| count(*) |
++----------+
+|        2 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select count(*) from Book_author b, author a where a.name="Akash" && a.author_id=b.author_id;
++----------+
+| count(*) |
++----------+
+|        2 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select count(*) from Book_author b, author a where a.name="Karthik" && a.author_id=b.author_id;
++----------+
+| count(*) |
++----------+
+|        1 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> 
+
