@@ -1,0 +1,307 @@
+s5cii@cc-Vostro-3470:~$ mysql -u s5c43 -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 11
+Server version: 5.7.39-0ubuntu0.18.04.2 (Ubuntu)
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database Library;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> drop database library;
+ERROR 1008 (HY000): Can't drop database 'library'; database doesn't exist
+mysql> drop database Library;
+Query OK, 0 rows affected (0.04 sec)
+mysql> use library;
+Database changed
+
+mysql> CREATE TABLE book ( book_id int PRIMARY KEY, title varchar(20), language_id int, mrp BIGINT, published_id int, published_data date, volume int, status varchar(20));
+Query OK, 0 rows affected (0.26 sec)
+
+mysql> CREATE TABLE author (author_id int PRIMARY KEY, name varchar(20), email varchar(20), phno int, status varchar(20));
+Query OK, 0 rows affected (0.23 sec)
+
+mysql> CREATE TABLE member (member_id int Primary key, name varchar(20), email varchar(20), rollno int, status varchar(20),  branch_code int, date_of_join date);
+Query OK, 0 rows affected (0.23 sec)
+
+mysql> CREATE TABLE publisher (publisher_id int PRIMARY KEY, name varchar(20), address varchar(50));
+Query OK, 0 rows affected (0.33 sec)
+
+mysql> CREATE TABLE language (lang_id int PRIMARY KEY, name varchar(20));
+Query OK, 0 rows affected (0.36 sec)
+
+mysql> CREATE TABLE late_fee_rule (from_days int , to_days int, amount int, CONSTRAINT COMP_NAME PRIMARY KEY(from_days, to_days, amount));
+Query OK, 0 rows affected (0.24 sec)
+
+mysql> CREATE TABLE Book_author (book_id int, author_id int , CONSTRAINT bkpk PRIMARY KEY(book_id, author_id));
+Query OK, 0 rows affected (0.25 sec)
+
+mysql> CREATE TABLE Book_issue (issue_id int PRIMARY KEY,book_id int , member_id int, date_of_issue date, expected_date_of_return date);
+Query OK, 0 rows affected (0.35 sec)
+
+mysql> ALTER TABLE Book_issue ADD CONSTRAINT c1 FOREIGN KEY(book_id) REFERENCES book(book_id);
+Query OK, 0 rows affected (0.77 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> CREATE TABLE Book_return (issue_id int, actual_date_of_return date , late_days int, latefee int);
+Query OK, 0 rows affected (0.28 sec)
+
+mysql> ALTER TABLE Book_return ADD CONSTRAINT brc FOREIGN KEY(issue_id) REFERENCES Book_issue(issue_id);
+Query OK, 0 rows affected (0.72 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+// Exp qn2 output with foreign key
+mysql> Drop table book;
+ERROR 1217 (23000): Cannot delete or update a parent row: a foreign key constraint fails
+
+// Without foreign key
+mysql> drop table author;
+Query OK, 0 rows affected (0.14 sec)
+
+
+mysql> ALTER table Book_author add constraint c14 foreign key(Book_id) references book(book_id);
+Query OK, 0 rows affected (0.57 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER table Book_author add constraint c16 foreign key(author_id) references author(author_id);
+Query OK, 0 rows affected (0.76 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+//Question 4 without data.
+
+mysql> Alter table book add authorname varchar(20);
+Query OK, 0 rows affected (0.49 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc book;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| book_id        | int(11)     | NO   | PRI | NULL    |       |
+| title          | varchar(20) | YES  |     | NULL    |       |
+| language_id    | int(11)     | YES  | MUL | NULL    |       |
+| mrp            | bigint(20)  | YES  |     | NULL    |       |
+| published_id   | int(11)     | YES  | MUL | NULL    |       |
+| published_data | date        | YES  |     | NULL    |       |
+| volume         | int(11)     | YES  |     | NULL    |       |
+| status         | varchar(20) | YES  |     | NULL    |       |
+| authorname     | varchar(20) | YES  |     | NULL    |       |
++----------------+-------------+------+-----+---------+-------+
+9 rows in set (0.00 sec)
+
+mysql> alter table book drop column authorname;
+Query OK, 0 rows affected (0.79 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc book;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| book_id        | int(11)     | NO   | PRI | NULL    |       |
+| title          | varchar(20) | YES  |     | NULL    |       |
+| language_id    | int(11)     | YES  | MUL | NULL    |       |
+| mrp            | bigint(20)  | YES  |     | NULL    |       |
+| published_id   | int(11)     | YES  | MUL | NULL    |       |
+| published_data | date        | YES  |     | NULL    |       |
+| volume         | int(11)     | YES  |     | NULL    |       |
+| status         | varchar(20) | YES  |     | NULL    |       |
++----------------+-------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+// Question 4 with data
+
+mysql> INSERT INTO langauge VALUES (7603, "ENGLISH");
+ERROR 1146 (42S02): Table 'library.langauge' doesn't exist
+mysql> INSERT INTO language VALUES (7603, "ENGLISH"),(2004,"Malayalam"),(2002,"Kiliki");
+Query OK, 3 rows affected (0.04 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from language;
++---------+-----------+
+| lang_id | name      |
++---------+-----------+
+|    2002 | Kiliki    |
+|    2004 | Malayalam |
+|    7603 | ENGLISH   |
++---------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> alter table language ADD example varchar(20);
+Query OK, 0 rows affected (0.58 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from language;
++---------+-----------+---------+
+| lang_id | name      | example |
++---------+-----------+---------+
+|    2002 | Kiliki    | NULL    |
+|    2004 | Malayalam | NULL    |
+|    7603 | ENGLISH   | NULL    |
++---------+-----------+---------+
+3 rows in set (0.00 sec)
+
+mysql> insert into language values(8999,'telugu',"abcd");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from language;
++---------+-----------+---------+
+| lang_id | name      | example |
++---------+-----------+---------+
+|    2002 | Kiliki    | NULL    |
+|    2004 | Malayalam | NULL    |
+|    7603 | ENGLISH   | NULL    |
+|    8999 | telugu    | abcd    |
++---------+-----------+---------+
+4 rows in set (0.00 sec)
+
+mysql> alter table language drop column example;
+Query OK, 0 rows affected (0.54 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from language;
++---------+-----------+
+| lang_id | name      |
++---------+-----------+
+|    2002 | Kiliki    |
+|    2004 | Malayalam |
+|    7603 | ENGLISH   |
+|    8999 | telugu    |
++---------+-----------+
+4 rows in set (0.00 sec)
+
+// Describing all tables
+
+mysql> desc book;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| book_id        | int(11)     | NO   | PRI | NULL    |       |
+| title          | varchar(20) | YES  |     | NULL    |       |
+| language_id    | int(11)     | YES  | MUL | NULL    |       |
+| mrp            | bigint(20)  | YES  |     | NULL    |       |
+| published_id   | int(11)     | YES  | MUL | NULL    |       |
+| published_data | date        | YES  |     | NULL    |       |
+| volume         | int(11)     | YES  |     | NULL    |       |
+| status         | varchar(20) | YES  |     | NULL    |       |
++----------------+-------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+mysql> desc author;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| author_id | int(11)     | NO   | PRI | NULL    |       |
+| name      | varchar(20) | YES  |     | NULL    |       |
+| email     | varchar(20) | YES  |     | NULL    |       |
+| phno      | int(11)     | YES  |     | NULL    |       |
+| status    | varchar(20) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> desc Book_author;
++-----------+---------+------+-----+---------+-------+
+| Field     | Type    | Null | Key | Default | Extra |
++-----------+---------+------+-----+---------+-------+
+| book_id   | int(11) | NO   | PRI | NULL    |       |
+| author_id | int(11) | NO   | PRI | NULL    |       |
++-----------+---------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> desc book_return;
+ERROR 1146 (42S02): Table 'library.book_return' doesn't exist
+mysql> desc Book_return;
++-----------------------+---------+------+-----+---------+-------+
+| Field                 | Type    | Null | Key | Default | Extra |
++-----------------------+---------+------+-----+---------+-------+
+| issue_id              | int(11) | YES  | MUL | NULL    |       |
+| actual_date_of_return | date    | YES  |     | NULL    |       |
+| late_days             | int(11) | YES  |     | NULL    |       |
+| latefee               | int(11) | YES  |     | NULL    |       |
++-----------------------+---------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> desc publisher;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| publisher_id | int(11)     | NO   | PRI | NULL    |       |
+| name         | varchar(20) | YES  |     | NULL    |       |
+| address      | varchar(50) | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> desc member;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| member_id    | int(11)     | NO   | PRI | NULL    |       |
+| name         | varchar(20) | YES  |     | NULL    |       |
+| email        | varchar(20) | YES  |     | NULL    |       |
+| rollno       | int(11)     | YES  |     | NULL    |       |
+| status       | varchar(20) | YES  |     | NULL    |       |
+| branch_code  | int(11)     | YES  |     | NULL    |       |
+| date_of_join | date        | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> desc Book_issue;
++-------------------------+---------+------+-----+---------+-------+
+| Field                   | Type    | Null | Key | Default | Extra |
++-------------------------+---------+------+-----+---------+-------+
+| issue_id                | int(11) | NO   | PRI | NULL    |       |
+| book_id                 | int(11) | YES  | MUL | NULL    |       |
+| member_id               | int(11) | YES  | MUL | NULL    |       |
+| date_of_issue           | date    | YES  |     | NULL    |       |
+| expected_date_of_return | date    | YES  |     | NULL    |       |
++-------------------------+---------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> desc Book_return;
++-----------------------+---------+------+-----+---------+-------+
+| Field                 | Type    | Null | Key | Default | Extra |
++-----------------------+---------+------+-----+---------+-------+
+| issue_id              | int(11) | YES  | MUL | NULL    |       |
+| actual_date_of_return | date    | YES  |     | NULL    |       |
+| late_days             | int(11) | YES  |     | NULL    |       |
+| latefee               | int(11) | YES  |     | NULL    |       |
++-----------------------+---------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> desc language;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| lang_id | int(11)     | NO   | PRI | NULL    |       |
+| name    | varchar(20) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> desc late_fee_rule;
++-----------+---------+------+-----+---------+-------+
+| Field     | Type    | Null | Key | Default | Extra |
++-----------+---------+------+-----+---------+-------+
+| from_days | int(11) | NO   | PRI | NULL    |       |
+| to_days   | int(11) | NO   | PRI | NULL    |       |
+| amount    | int(11) | NO   | PRI | NULL    |       |
++-----------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+// Question 5 to show index
+
+mysql> show index from Book_issue;
++------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Table      | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Book_issue |          0 | PRIMARY  |            1 | issue_id    | A         |           0 |     NULL | NULL   |      | BTREE      |         |               |
+| Book_issue |          1 | c1       |            1 | book_id     | A         |           0 |     NULL | NULL   | YES  | BTREE      |         |               |
+| Book_issue |          1 | membook  |            1 | member_id   | A         |           0 |     NULL | NULL   | YES  | BTREE      |         |               |
+| Book_issue |          1 | membook  |            2 | book_id     | A         |           0 |     NULL | NULL   | YES  | BTREE      |         |               |
++------------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+4 rows in set (0.00 sec)
