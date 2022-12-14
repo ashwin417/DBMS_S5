@@ -1,0 +1,11 @@
+mysql> CREATE VIEW Availablebooks as SELECT title from book where status='Available';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from Availablebooks;
++-------------------+
+| title             |
++-------------------+
+| Journey Of Dreams |
+| Jeevitham         |
++-------------------+
+2 rows in set (0.00 sec)
