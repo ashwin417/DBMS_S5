@@ -1,0 +1,30 @@
+Stored PROCEDURE I
+
+mysql>  Delimiter &&
+mysql>  CREATE PROCEDURE book_return2()
+    ->  BEGIN
+    ->          INSERT into Book_return values(4,'2023-07-21',0,0);
+    ->          UPDATE Book_issue set status = 'return' where issue_id = 902;
+    ->  END &&
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call book_return2(); &&
+
+mysql> select * from book_issue;
++----------+---------+-----------+---------------+-------------------------+--------+
+| issue_id | book_id | member_id | date_of_issue | expected_date_of_return | status |
++----------+---------+-----------+---------------+-------------------------+--------+
+|      901 |       1 |       502 | 2022-11-01    | 2022-11-08              | NULL   |
+|      902 |       2 |       501 | 2022-10-16    | 2022-10-23              | return |
++----------+---------+-----------+---------------+-------------------------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select * from book_return;
++----------+-----------------------+-----------+---------+
+| issue_id | actual_date_of_return | late_days | latefee |
++----------+-----------------------+-----------+---------+
+|      901 | 2022-11-10            |         2 |      10 |
+|      902 | 2022-10-23            |         0 |       0 |
+|        4 | 2023-07-21            |         0 |       0 |
++----------+-----------------------+-----------+---------+
+3 rows in set (0.00 sec)
