@@ -1,0 +1,159 @@
+mysql>  create table employee (emp_id int primary key not null , first_name varchar (10), last_name varchar(10), email_id varchar(20),ph_no bigint,hire_date date,salary bigint, postal_code int);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> ALTER TABLE employee ADD CONSTRAINT pc FOREIGN KEY(postal_code) REFERENCES city(postal_code);
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc employee;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| emp_id      | int         | NO   | PRI | NULL    |       |
+| first_name  | varchar(10) | YES  |     | NULL    |       |
+| last_name   | varchar(10) | YES  |     | NULL    |       |
+| email_id    | varchar(20) | YES  |     | NULL    |       |
+| ph_no       | bigint      | YES  |     | NULL    |       |
+| hire_date   | date        | YES  |     | NULL    |       |
+| salary      | bigint      | YES  |     | NULL    |       |
+| postal_code | int         | YES  | MUL | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+
+mysql> create table city (city_name varchar(10), postal_code int(20) primary key not null,state varchar(20));
+Query OK, 0 rows affected, 1 warning (0.01 sec)
+
+mysql> desc city;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| city_name   | varchar(10) | YES  |     | NULL    |       |
+| postal_code | int         | NO   | PRI | NULL    |       |
+| state       | varchar(20) | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> CREATE TABLE department (manager_id int, dept_name varchar(20) primary key not null, FOREIGN key(manager_id) REFERENCES employee(emp_id));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> desc department;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| manager_id | int         | YES  | MUL | NULL    |       |
+| dept_name  | varchar(20) | NO   | PRI | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> insert into city values ("Chengannur",689121,"Kerala")
+    -> ,
+    -> ("Chennai",600056,"Tamil Nadu"),
+    -> ("Kochi",600043,"Kerala"),("Banglore",500036,"Karnataka");
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from city;
++------------+-------------+------------+
+| city_name  | postal_code | state      |
++------------+-------------+------------+
+| Banglore   |      500036 | Karnataka  |
+| Kochi      |      600043 | Kerala     |
+| Chennai    |      600056 | Tamil Nadu |
+| Chengannur |      689121 | Kerala     |
++------------+-------------+------------+
+4 rows in set (0.00 sec)
+
+
+mysql> insert into employee values
+    -> (1001,"Akash","Kumar","akl@gmail.com",9526962697,'2021-12-08',150000,689121),
+    -> (1002,"Ashwin","R","ash@proton.me",9962035417,'2021-06-07',70000,500036),
+    -> (1003,"Adarsh","J","akgf@yahoo.com",6282330338,'2022-05-03',80000,600043),
+    -> (1004,"Karthik","Vijay","kvsheikh@gmail.com",8547257478,'2020-11-28',100000,689121),
+    -> (1005,"Nibin","Sreenivas","nibinbyr@yahoo.com",7994939902,'2021-12-07',90000,600056),
+    -> (1006,"Ravi","Sankar","rstklm@gmail.com",9496834211,'2022-08-11',75000,600043),
+    -> (1007,"Anandhu","Mohan","am@gmail.com",8138849120,'2022-11-02',120000,600056);
+Query OK, 7 rows affected (0.00 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee;
+    
++--------+------------+-----------+--------------------+------------+------------+--------+-------------+
+| emp_id | first_name | last_name | email_id           | ph_no      | hire_date  | salary | postal_code |
++--------+------------+-----------+--------------------+------------+------------+--------+-------------+
+|   1001 | Akash      | Kumar     | akl@gmail.com      | 9526962697 | 2021-12-08 | 150000 |      689121 |
+|   1002 | Ashwin     | R         | ash@proton.me      | 9962035417 | 2021-06-07 |  70000 |      500036 |
+|   1003 | Adarsh     | J         | akgf@yahoo.com     | 6282330338 | 2022-05-03 |  80000 |      600043 |
+|   1004 | Karthik    | Vijay     | kvsheikh@gmail.com | 8547257478 | 2020-11-28 | 100000 |      689121 |
+|   1005 | Nibin      | Sreenivas | nibinbyr@yahoo.com | 7994939902 | 2021-12-07 |  90000 |      600056 |
+|   1006 | Ravi       | Sankar    | rstklm@gmail.com   | 9496834211 | 2022-08-11 |  75000 |      600043 |
+|   1007 | Anandhu    | Mohan     | am@gmail.com       | 8138849120 | 2022-11-02 | 120000 |      600056 |
++--------+------------+-----------+--------------------+------------+------------+--------+-------------+
+7 rows in set (0.00 sec)
+
+mysql> insert into department values
+    -> (1004,"Web Development"),(1005,"Flutter App"),(1002,"Cybersecurity");
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from department;
++------------+-----------------+
+| manager_id | dept_name       |
++------------+-----------------+
+|       1002 | Cybersecurity   |
+|       1004 | Web Development |
+|       1005 | Flutter App     |
++------------+-----------------+
+3 rows in set (0.00 sec)
+
+mysql> delimiter //
+mysql> create procedure salaryEmpcnt (in var int)
+    ->      begin
+    ->      if var = 1 then
+    ->      select count(*) from employee where salary>100000;
+    ->      elseif var = 2 then
+    ->      select count(*) from employee where salary<100000;
+    ->      elseif var =3 then
+    ->      select count(*) from employee where salary=100000;
+    ->      end if;
+    ->      end //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call salaryEmpcnt(1);
+    -> //
++----------+
+| count(*) |
++----------+
+|        2 |
++----------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> create procedure bonuscalc (in empid int)
+    ->  begin
+    ->          declare sal int;
+    ->         select salary from employee where emp_id = empid into sal;
+    ->         if (sal<=70000) then
+    ->                  select (0.2*sal) ;
+    ->          elseif (sal>70000 and sal <= 85000)
+    ->                  then select (0.15*sal);
+    ->          elseif (sal>85000 and sal<=100000)
+    ->                  then select (0.1*sal);
+    ->          elseif sal > 100000
+    ->                  then select (0.05*sal);
+    ->          end if;
+    ->  end //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call bonuscalc(1001);
+    -> //
++------------+
+| (0.05*sal) |
++------------+
+|    7500.00 |
++------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
