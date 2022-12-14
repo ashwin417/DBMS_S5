@@ -1,0 +1,97 @@
+mysql> create procedure books_issue_register()
+    -> begin
+    ->  declare v_issueid integer;
+    ->     declare v_doi date;
+    ->     declare v_exp_dor date;
+    ->     declare v_memberid integer;
+    ->     declare flag integer default 0;
+    ->     declare cur cursor for
+    ->     select issue_id, date_of_issue,expected_date_of_return,member_id from book_issue;
+    ->     declare continue handler for not found set flag = 1;
+    ->         open cur;
+    ->         get_list : loop fetch cur into v_issueid, v_doi,v_exp_dor,v_memberid;
+    ->                  if flag = 1 then
+    ->                          leave get_list;
+    ->                  end if;
+    ->          select concat(v_issueid,concat(';',concat(v_exp_dor,concat(';',v_memberid))))
+    ->         as register;
+    ->         End Loop get_list;
+    ->         close cur;
+    -> end //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call books_issue_register();
+    -> //
++--------------------+
+| register           |
++--------------------+
+| 901;2022-11-08;502 |
++--------------------+
+1 row in set (0.01 sec)
+
++--------------------+
+| register           |
++--------------------+
+| 902;2022-10-23;501 |
++--------------------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+-------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------OR-----------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+mysql> create procedure books_issue_reg(inout register varchar(10000))
+    -> begin
+    ->  declare v_issueid integer;
+    ->     declare v_doi date;
+    ->     declare v_exp_dor date;
+    ->     declare v_memberid integer;
+    ->     declare flag integer default 0;
+    ->     declare cur cursor for
+    ->     select issue_id, date_of_issue,expected_date_of_return,member_id from book_issue;
+    ->     declare continue handler for not found set flag = 1;
+    ->         open cur;
+    ->         get_list : loop fetch cur into v_issueid, v_doi,v_exp_dor,v_memberid;
+    ->                  if flag = 1 then
+    ->                          leave get_list;
+    ->                  end if;
+    ->          set register = concat(v_issueid,concat(';',concat(v_exp_dor,concat(';',v_memberid)))) ;
+    ->         select register;
+    ->         End Loop get_list;
+    ->         close cur;
+    -> end //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> set reg="";
+    -> //
+ERROR 1193 (HY000): Unknown system variable 'reg'
+mysql> set @reg="";
+    -> //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select book_issue_reg(@reg);
+    -> //
+ERROR 1305 (42000): FUNCTION library.book_issue_reg does not exist
+mysql> call book_issue_reg(@reg);
+    -> //
+ERROR 1305 (42000): PROCEDURE library.book_issue_reg does not exist
+mysql> call books_issue_reg(@reg);
+    -> //
++--------------------+
+| register           |
++--------------------+
+| 901;2022-11-08;502 |
++--------------------+
+1 row in set (0.00 sec)
+
++--------------------+
+| register           |
++--------------------+
+| 902;2022-10-23;501 |
++--------------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
