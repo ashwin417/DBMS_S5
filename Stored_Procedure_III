@@ -176,20 +176,20 @@ Query OK, 0 rows affected (0.00 sec)
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------
 
-mysql> create procedure bonuscalc (in empid int)
-    ->  begin
-    ->          declare sal int;
-    ->         select salary from employee where emp_id = empid into sal;
-    ->         if (sal<=70000) then
-    ->                  select (0.2*sal) ;
-    ->          elseif (sal>70000 and sal <= 85000)
-    ->                  then select (0.15*sal);
-    ->          elseif (sal>85000 and sal<=100000)
-    ->                  then select (0.1*sal);
-    ->          elseif sal > 100000
-    ->                  then select (0.05*sal);
-    ->          end if;
-    ->  end //
+mysql>create procedure bonuscalc (in empid int)
+	begin
+		declare sal int;
+        select salary from employee where emp_id = empid into sal;
+        if (sal<=70000) then
+			select (0.2*sal) As Bonus ;
+		elseif (sal>70000 and sal <= 85000)
+			then select (0.15*sal) as Bonus;
+		elseif (sal>85000 and sal<=100000)
+			then select (0.1*sal);
+		elseif sal > 100000
+			then select (0.05*sal) as Bonus ;
+		end if;
+	end //
 Query OK, 0 rows affected (0.00 sec)
 
 mysql> call bonuscalc(1001);
