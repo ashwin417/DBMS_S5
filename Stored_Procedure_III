@@ -185,7 +185,7 @@ mysql>create procedure bonuscalc (in empid int)
 		elseif (sal>70000 and sal <= 85000)
 			then select (0.15*sal) as Bonus;
 		elseif (sal>85000 and sal<=100000)
-			then select (0.1*sal);
+			then select (0.1*sal) as Bonus;
 		elseif sal > 100000
 			then select (0.05*sal) as Bonus ;
 		end if;
@@ -195,7 +195,7 @@ Query OK, 0 rows affected (0.00 sec)
 mysql> call bonuscalc(1001);
     -> //
 +------------+
-| (0.05*sal) |
+|    Bonus   |
 +------------+
 |    7500.00 |
 +------------+
