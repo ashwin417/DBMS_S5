@@ -1,0 +1,130 @@
+test> use Employee
+switched to db Employee
+Employee> db.createCollection('db_employee')
+{ ok: 1 }
+Employee> db.db_employee.insertMany([
+...   {emp_name: "Sharath", designation: "sales", salary: 15000},
+...   {emp_name: "Shyam", designation: "manager", salary: 50000},
+...   {emp_name: "Abraham", designation: "superwiser", salary: 35000},
+...   {emp_name: "Muhammed", designation: "sales", salary: 15000},
+...   {emp_name: "Rohith", designation: "sales", salary: 20000},
+...   {emp_name: "Nirmal", designation: "driver", salary: 20000},
+...   {emp_name: "Samuel", designation: "superwiser", salary: 35000},
+...   {emp_name: "Johns", designation: "sales", salary: 15000}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("63bc4fae3b01577ae451cc0a"),
+    '1': ObjectId("63bc4fae3b01577ae451cc0b"),
+    '2': ObjectId("63bc4fae3b01577ae451cc0c"),
+    '3': ObjectId("63bc4fae3b01577ae451cc0d"),
+    '4': ObjectId("63bc4fae3b01577ae451cc0e"),
+    '5': ObjectId("63bc4fae3b01577ae451cc0f"),
+    '6': ObjectId("63bc4fae3b01577ae451cc10"),
+    '7': ObjectId("63bc4fae3b01577ae451cc11")
+  }
+}
+Employee> db.db_employee.find({$and:[{salary:{$gt:15000}},{designation:'superwiser'}]})
+[
+  {
+    _id: ObjectId("63bc4fae3b01577ae451cc0c"),
+    emp_name: 'Abraham',
+    designation: 'superwiser',
+    salary: 35000
+  },
+  {
+    _id: ObjectId("63bc4fae3b01577ae451cc10"),
+    emp_name: 'Samuel',
+    designation: 'superwiser',
+    salary: 35000
+  }
+]
+Employee> db.db_employee.find({designation:{$in:['sales']}})
+[
+  {
+    _id: ObjectId("63bc4fae3b01577ae451cc0a"),
+    emp_name: 'Sharath',
+    designation: 'sales',
+    salary: 15000
+  },
+  {
+    _id: ObjectId("63bc4fae3b01577ae451cc0d"),
+    emp_name: 'Muhammed',
+    designation: 'sales',
+    salary: 15000
+  },
+  {
+    _id: ObjectId("63bc4fae3b01577ae451cc0e"),
+    emp_name: 'Rohith',
+    designation: 'sales',
+    salary: 20000
+  },
+  {
+    _id: ObjectId("63bc4fae3b01577ae451cc11"),
+    emp_name: 'Johns',
+    designation: 'sales',
+    salary: 15000
+  }
+]
+Employee> db.db_employee.updateOne({emp_name:'Sharath'},{$set:{emp_name:'Abhijith'}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+Employee> db.db_employee.find()
+[
+  {
+    _id: ObjectId("63bc4fae3b01577ae451cc0a"),
+    emp_name: 'Abhijith',
+    designation: 'sales',
+    salary: 15000
+  },
+  {
+    _id: ObjectId("63bc4fae3b01577ae451cc0b"),
+    emp_name: 'Shyam',
+    designation: 'manager',
+    salary: 50000
+  },
+  {
+    _id: ObjectId("63bc4fae3b01577ae451cc0c"),
+    emp_name: 'Abraham',
+    designation: 'superwiser',
+    salary: 35000
+  },
+  {
+    _id: ObjectId("63bc4fae3b01577ae451cc0d"),
+    emp_name: 'Muhammed',
+    designation: 'sales',
+    salary: 15000
+  },
+  {
+    _id: ObjectId("63bc4fae3b01577ae451cc0e"),
+    emp_name: 'Rohith',
+    designation: 'sales',
+    salary: 20000
+  },
+  {
+    _id: ObjectId("63bc4fae3b01577ae451cc0f"),
+    emp_name: 'Nirmal',
+    designation: 'driver',
+    salary: 20000
+  },
+  {
+    _id: ObjectId("63bc4fae3b01577ae451cc10"),
+    emp_name: 'Samuel',
+    designation: 'superwiser',
+    salary: 35000
+  },
+  {
+    _id: ObjectId("63bc4fae3b01577ae451cc11"),
+    emp_name: 'Johns',
+    designation: 'sales',
+    salary: 15000
+  }
+]
+Employee> db.db_employee.aggregate([{$match:{designation:'sales'}},{$group:{_id:null,salary_sum:{$sum:'$salary'}}}])
+[ { _id: null, salary_sum: 65000 } ]
+Employee>
