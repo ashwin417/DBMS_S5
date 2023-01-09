@@ -1,0 +1,118 @@
+mysql> create database Bank;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use Bank;
+Database changed
+mysql> create table customer(acc_no integer,Name varchar(20),balance integer,primary key(acc_no));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create table customer_detail(acc_no integer,cust_name varchar(20),primary key(acc_no));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create table mini_statement(acc_no integer,avail_balance int,foreign key(acc_no) references customer(acc_no));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> desc customer;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| acc_no  | int         | NO   | PRI | NULL    |       |
+| Name    | varchar(20) | YES  |     | NULL    |       |
+| balance | int         | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> desc customer_detail;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| acc_no    | int         | NO   | PRI | NULL    |       |
+| cust_name | varchar(20) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> desc mini_statement;
++---------------+------+------+-----+---------+-------+
+| Field         | Type | Null | Key | Default | Extra |
++---------------+------+------+-----+---------+-------+
+| acc_no        | int  | YES  | MUL | NULL    |       |
+| avail_balance | int  | YES  |     | NULL    |       |
++---------------+------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select * from customer;
+Empty set (0.00 sec)
+
+mysql> select * from customer_detail;
+Empty set (0.00 sec)
+
+mysql> select * from mini_statement;
+Empty set (0.00 sec)
+
+mysql> delimiter //
+mysql> create trigger after_cust_update after insert on customer for each row begin insert into customer_detail(acc_no,cust_name) values(new.acc_no,new.Name); end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> insert into customer values(100,'Manu',12000),(101,'Remya',3000),(102,'Anu',15000),(103,'Sonu',20000),(104,'Achu',25000);
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from customer;
++--------+-------+---------+
+| acc_no | Name  | balance |
++--------+-------+---------+
+|    100 | Manu  |   12000 |
+|    101 | Remya |    3000 |
+|    102 | Anu   |   15000 |
+|    103 | Sonu  |   20000 |
+|    104 | Achu  |   25000 |
++--------+-------+---------+
+5 rows in set (0.00 sec)
+
+mysql>  select * from customer_detail;
++--------+-----------+
+| acc_no | cust_name |
++--------+-----------+
+|    100 | Manu      |
+|    101 | Remya     |
+|    102 | Anu       |
+|    103 | Sonu      |
+|    104 | Achu      |
++--------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> delimiter //
+mysql>  create trigger update_customer
+    ->     before update on customer
+    ->     for each row
+    ->     begin
+    ->     insert into mini_statement values(old.acc_no,old.balance);
+    ->     end
+    ->     //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter ;
+mysql> update customer set balance=50000 where acc_no=104;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from customer;
++--------+-------+---------+
+| acc_no | Name  | balance |
++--------+-------+---------+
+|    100 | Manu  |   12000 |
+|    101 | Remya |    3000 |
+|    102 | Anu   |   15000 |
+|    103 | Sonu  |   20000 |
+|    104 | Achu  |   50000 |
++--------+-------+---------+
+5 rows in set (0.00 sec)
+
+mysql> select * from mini_statement;
++--------+---------------+
+| acc_no | avail_balance |
++--------+---------------+
+|    104 |         25000 |
++--------+---------------+
+1 row in set (0.00 sec)
