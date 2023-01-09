@@ -1,0 +1,194 @@
+Build sample collections/documents to perform query operation.
+
+------------------------------------------
+i. Create a database (Eg: MyCev)
+
+test> use MyCev
+switched to db MyCev
+------------------------------------------
+
+ii. Create a collection (Eg. db_mca)
+
+MyCev> db.createCollection('db_mca')
+{ ok: 1 }
+
+iii. Create a collection (Eg. db_cs)
+
+MyCev> db.createCollection('db_cs')
+{ ok: 1 }
+----------------------------------------
+iv.lnsert 10 data to the collection
+
+MyCev> db.db_cs.insertMany([{
+... 'name':'Ashwin',
+...  'rno':7,
+...   },
+...   {'name':'Karthik',
+...   'rno':11
+...   },
+...   {'name':'Akash',
+...   'rno':14
+...   },
+...   {'name':'Adarsh',
+...   'rno':10
+...   },
+...   {'name':'Nibin',
+...   'rno':20
+...   },
+...   {'name':'Anandhu',
+...   'rno':16
+...   },
+...   {'name':'Shweta',
+...   'rno':13
+...   },
+...   {'name':'Suji',
+...   'rno':17
+...   },
+...   {'name':'Ravi',
+...   'rno':18
+...   },
+...   {'name':'Sonu',
+...   'rno':28
+...   }])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("63bc3876806da1a47c9f4363"),
+    '1': ObjectId("63bc3876806da1a47c9f4364"),
+    '2': ObjectId("63bc3876806da1a47c9f4365"),
+    '3': ObjectId("63bc3876806da1a47c9f4366"),
+    '4': ObjectId("63bc3876806da1a47c9f4367"),
+    '5': ObjectId("63bc3876806da1a47c9f4368"),
+    '6': ObjectId("63bc3876806da1a47c9f4369"),
+    '7': ObjectId("63bc3876806da1a47c9f436a"),
+    '8': ObjectId("63bc3876806da1a47c9f436b"),
+    '9': ObjectId("63bc3876806da1a47c9f436c")
+  }
+}
+
+MyCev> db.db_cs.find().pretty()
+[
+  { _id: ObjectId("63bc3876806da1a47c9f4363"), name: 'Ashwin', rno: 7 },
+  {
+    _id: ObjectId("63bc3876806da1a47c9f4364"),
+    name: 'Karthik',
+    rno: 11
+  },
+  { _id: ObjectId("63bc3876806da1a47c9f4365"), name: 'Akash', rno: 14 },
+  {
+    _id: ObjectId("63bc3876806da1a47c9f4366"),
+    name: 'Adarsh',
+    rno: 10
+  },
+  { _id: ObjectId("63bc3876806da1a47c9f4367"), name: 'Nibin', rno: 20 },
+  {
+    _id: ObjectId("63bc3876806da1a47c9f4368"),
+    name: 'Anandhu',
+    rno: 16
+  },
+  {
+    _id: ObjectId("63bc3876806da1a47c9f4369"),
+    name: 'Shweta',
+    rno: 13
+  },
+  { _id: ObjectId("63bc3876806da1a47c9f436a"), name: 'Suji', rno: 17 },
+  { _id: ObjectId("63bc3876806da1a47c9f436b"), name: 'Ravi', rno: 18 },
+  { _id: ObjectId("63bc3876806da1a47c9f436c"), name: 'Sonu', rno: 28 }
+]
+----------------------------------------------------------------------------------
+v. List the first § data from the collection (limit)
+
+MyCev> db.db_cs.find().pretty().limit(5)
+[
+  { _id: ObjectId("63bc3876806da1a47c9f4363"), name: 'Ashwin', rno: 7 },
+  {
+    _id: ObjectId("63bc3876806da1a47c9f4364"),
+    name: 'Karthik',
+    rno: 11
+  },
+  { _id: ObjectId("63bc3876806da1a47c9f4365"), name: 'Akash', rno: 14 },
+  {
+    _id: ObjectId("63bc3876806da1a47c9f4366"),
+    name: 'Adarsh',
+    rno: 10
+  },
+  { _id: ObjectId("63bc3876806da1a47c9f4367"), name: 'Nibin', rno: 20 }
+]
+----------------------------------------------------------------------------------
+vi. List the entire data except first 2 data (skip)
+
+MyCev> db.db_cs.find().pretty().skip(2)
+[
+  { _id: ObjectId("63bc3876806da1a47c9f4365"), name: 'Akash', rno: 14 },
+  {
+    _id: ObjectId("63bc3876806da1a47c9f4366"),
+    name: 'Adarsh',
+    rno: 10
+  },
+  { _id: ObjectId("63bc3876806da1a47c9f4367"), name: 'Nibin', rno: 20 },
+  {
+    _id: ObjectId("63bc3876806da1a47c9f4368"),
+    name: 'Anandhu',
+    rno: 16
+  },
+  {
+    _id: ObjectId("63bc3876806da1a47c9f4369"),
+    name: 'Shweta',
+    rno: 13
+  },
+  { _id: ObjectId("63bc3876806da1a47c9f436a"), name: 'Suji', rno: 17 },
+  { _id: ObjectId("63bc3876806da1a47c9f436b"), name: 'Ravi', rno: 18 },
+  { _id: ObjectId("63bc3876806da1a47c9f436c"), name: 'Sonu', rno: 28 }
+]
+------------------------------------------------------------------------
+vi. Sort the data by choosing any field in the collection
+
+MyCev>  db.db_cs.find().sort("rno")
+[
+  { _id: ObjectId("63bc3c39806da1a47c9f436d"), name: 'Ashwin', rno: 7 },
+  {
+    _id: ObjectId("63bc3c39806da1a47c9f4370"),
+    name: 'Adarsh',
+    rno: 10
+  },
+  {
+    _id: ObjectId("63bc3c39806da1a47c9f436e"),
+    name: 'Karthik',
+    rno: 11
+  },
+  {
+    _id: ObjectId("63bc3c39806da1a47c9f4373"),
+    name: 'Shweta',
+    rno: 13
+  },
+  { _id: ObjectId("63bc3c39806da1a47c9f436f"), name: 'Akash', rno: 14 },
+  {
+    _id: ObjectId("63bc3c39806da1a47c9f4372"),
+    name: 'Anandhu',
+    rno: 16
+  },
+  { _id: ObjectId("63bc3c39806da1a47c9f4374"), name: 'Suji', rno: 17 },
+  { _id: ObjectId("63bc3c39806da1a47c9f4375"), name: 'Ravi', rno: 18 },
+  { _id: ObjectId("63bc3c39806da1a47c9f4371"), name: 'Nibin', rno: 20 },
+  { _id: ObjectId("63bc3c39806da1a47c9f4376"), name: 'Sonu', rno: 28 }
+]
+---------------------------------------------------------------------------------
+
+viii. Delete data from the collection
+
+MyCev>  db.db_cs.remove({})
+DeprecationWarning: Collection.remove() is deprecated. Use deleteOne, deleteMany, findOneAndDelete, or bulkWrite.
+{ acknowledged: true, deletedCount: 10 }
+
+MyCev>  db.db_cs.find().pretty()
+---------------------------------------------------------------------------------
+ix. Drop the collection
+
+MyCev> db.db_cs.drop()
+true
+
+---------------------------------------------------------------------------------
+x. Drop the database
+MyCev> db.dropDatabase()
+{ ok: 1, dropped: 'MyCev' }
+MyCev>
