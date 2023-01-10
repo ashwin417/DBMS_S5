@@ -15,7 +15,7 @@ mysql> create trigger update_History
     ->     before update on member
     ->     for each row
     ->     begin
-    ->         insert into History values(old.member_id, old.name,  old.email,old.rollno,  old.status, old.branch_code, old.date_of_join);
+    ->         insert into history values(old.member_id, old.name,  old.email,old.rollno,  old.status, old.branch_code, old.date_of_join);
     ->     end //
 Query OK, 0 rows affected (0.01 sec)
 
