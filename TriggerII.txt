@@ -141,3 +141,51 @@ mysql> select * from mini_statement;
 |    104 |         25000 |
 +--------+---------------+
 1 row in set (0.00 sec)
+
+mysql> delimiter //
+mysql> create trigger insert_new_customer
+    -> after insert on customer
+    -> for each row
+    -> begin
+    ->     insert into micro_statement values(new.acc_no,new.balance);
+    -> end
+    -> //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from micro_statement;//
+Empty set (0.00 sec)
+
+mysql> insert into customer values (105,"Adarsh",100000);
+    -> //
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from micro_statement;//
++--------+---------------+
+| acc_no | avail_balance |
++--------+---------------+
+|    105 |        100000 |
++--------+---------------+
+1 row in set (0.00 sec)
+mysql>   create trigger after_delete_store
+    ->     after delete on customer
+    ->     for each row
+    ->     begin
+    ->         insert into deleted_customer(acc_no,cust_name) values(old.acc_no,old.name);
+    ->     end
+    -> //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delete from customer where acc_no = 102;
+    -> //
+Query OK, 1 row affected (0.01 sec)
+
+
+mysql> select * from deleted_customer;
+    -> //
++--------+-----------+
+| acc_no | cust_name |
++--------+-----------+
+|    102 | Anu       |
++--------+-----------+
+1 row in set (0.00 sec)
+
